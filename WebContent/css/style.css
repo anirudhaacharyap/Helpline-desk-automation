@@ -1,0 +1,135 @@
+/* ============================================================
+   Helpdesk Support Ticket Automation — Custom Stylesheet
+   ============================================================ */
+
+/* ── Priority Badges ─────────────────────────────────────── */
+.badge-critical {
+    background-color: #dc3545 !important;
+    color: #fff;
+}
+.badge-high {
+    background-color: #fd7e14 !important;
+    color: #fff;
+}
+.badge-medium {
+    background-color: #ffc107 !important;
+    color: #212529;
+}
+.badge-low {
+    background-color: #28a745 !important;
+    color: #fff;
+}
+
+/* ── Status Badges ───────────────────────────────────────── */
+.badge-open {
+    background-color: #0d6efd !important;
+    color: #fff;
+}
+.badge-in_progress {
+    background-color: #fd7e14 !important;
+    color: #fff;
+}
+.badge-resolved {
+    background-color: #198754 !important;
+    color: #fff;
+}
+.badge-closed {
+    background-color: #6c757d !important;
+    color: #fff;
+}
+.badge-sla_breached {
+    background-color: #6f0000 !important;
+    color: #fff;
+}
+
+/* ── Navbar ──────────────────────────────────────────────── */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* ── Tables ──────────────────────────────────────────────── */
+.table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* ── Forms ───────────────────────────────────────────────── */
+.form-control:focus,
+.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+/* ── KB Suggestion Cards ─────────────────────────────────── */
+.kb-card {
+    background-color: #f0f9ff;
+    border: 1px solid #b6d4fe;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
+}
+
+.kb-card:hover {
+    background-color: #dbeafe;
+}
+
+.kb-card h5 {
+    margin-bottom: 6px;
+    color: #0d47a1;
+    font-size: 1rem;
+}
+
+.kb-card p {
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+/* ── Stat Cards (Admin Dashboard) ────────────────────────── */
+.card h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* ── Alerts ──────────────────────────────────────────────── */
+.alert {
+    border-radius: 6px;
+}
+
+/* ── General Layout ──────────────────────────────────────── */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                 'Helvetica Neue', Arial, sans-serif;
+}
+
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+/* ── Responsive Adjustments ──────────────────────────────── */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+
+    .card h2 {
+        font-size: 1.8rem;
+    }
+}
