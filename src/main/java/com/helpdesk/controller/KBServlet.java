@@ -4,6 +4,7 @@ import com.helpdesk.dao.KnowledgeBaseDAO;
 import com.helpdesk.model.KnowledgeBase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/kb/search")
+@WebServlet({"/kb", "/kb/search"})
 public class KBServlet extends HttpServlet {
 
     /**
@@ -22,6 +23,18 @@ public class KBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        String servletPath = req.getServletPath();
+        if ("/kb".equals(servletPath)) {
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/views/knowledgeBase.jsp");
+            dispatcher.forward(req, res);
+            return;
+        }
 
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
@@ -60,6 +73,16 @@ public class KBServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        if ("/kb".equals(req.getServletPath())) {
+            doGet(req, res);
+            return;
+        }
 
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
