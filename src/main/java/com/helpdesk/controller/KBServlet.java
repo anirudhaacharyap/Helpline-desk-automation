@@ -31,6 +31,8 @@ public class KBServlet extends HttpServlet {
 
         String servletPath = req.getServletPath();
         if ("/kb".equals(servletPath)) {
+            List<KnowledgeBase> entries = new KnowledgeBaseDAO().getAll();
+            req.setAttribute("kbEntries", entries);
             RequestDispatcher dispatcher = req.getRequestDispatcher("/views/knowledgeBase.jsp");
             dispatcher.forward(req, res);
             return;
@@ -80,7 +82,7 @@ public class KBServlet extends HttpServlet {
         }
 
         if ("/kb".equals(req.getServletPath())) {
-            doGet(req, res);
+            handleKbEntryCreate(req, res, session);
             return;
         }
 
@@ -99,6 +101,45 @@ public class KBServlet extends HttpServlet {
         } else {
             res.getWriter().write("{\"status\":\"error\"}");
         }
+    }
+
+    private void handleKbEntryCreate(HttpServletRequest req, HttpServletResponse res, HttpSession session)
+            throws IOException {
+        String role = (String) session.getAttribute("userRole");
+        if (!"agent".equals(role) && !"admin".equals(role)) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        String keyword = trim(req.getParameter("keyword"));
+        String solution = trim(req.getParameter("solution"));
+        String category = trim(req.getParameter("category"));
+
+        if (keyword == null || solution == null || category == null) {
+            res.sendRedirect(req.getContextPath() + "/kb?error=missing");
+            return;
+        }
+
+        KnowledgeBase kb = new KnowledgeBase();
+        kb.setKeyword(keyword);
+        kb.setSolution(solution);
+        kb.setCategory(category);
+
+        boolean saved = new KnowledgeBaseDAO().insertEntry(kb);
+        if (saved) {
+            res.sendRedirect(req.getContextPath() + "/kb?added=1");
+            return;
+        }
+
+        res.sendRedirect(req.getContextPath() + "/kb?error=save");
+    }
+
+    private String trim(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     /**

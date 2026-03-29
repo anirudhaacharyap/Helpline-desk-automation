@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="com.helpdesk.model.KnowledgeBase" %>
+<%@ page import="java.util.List" %>
 <%
     request.setAttribute("pageTitle", "Knowledge Base");
     String ctxPath = request.getContextPath();
     String userRole = (String) session.getAttribute("userRole");
     boolean canAdd = "agent".equals(userRole) || "admin".equals(userRole);
+    List<KnowledgeBase> kbEntries = (List<KnowledgeBase>) request.getAttribute("kbEntries");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +22,11 @@
     <div class="main-content">
         <jsp:include page="/views/includes/topbar.jsp" />
         <div class="page-body">
+<% if ("1".equals(request.getParameter("added"))) { %>
+            <div class="alert alert-success mb-16">Knowledge base entry saved.</div>
+<% } else if (request.getParameter("error") != null) { %>
+            <div class="alert alert-danger mb-16">Unable to save the knowledge base entry.</div>
+<% } %>
 
             <!-- Search Bar -->
             <div class="flex-between mb-16">
@@ -58,18 +66,18 @@
 <div id="addKBModal" class="modal-overlay">
     <div class="modal-box">
         <h3>Add KB Entry</h3>
-        <form id="addKBForm">
+        <form id="addKBForm" method="post" action="<%= ctxPath %>/kb">
             <div class="form-group">
                 <label>Keyword / Title</label>
-                <input type="text" id="kbKeyword" class="form-control" required>
+                <input type="text" id="kbKeyword" name="keyword" class="form-control" required>
             </div>
             <div class="form-group">
                 <label>Solution</label>
-                <textarea id="kbSolution" class="form-control" rows="4" required></textarea>
+                <textarea id="kbSolution" name="solution" class="form-control" rows="4" required></textarea>
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <select id="kbCategory" class="form-control">
+                <select id="kbCategory" name="category" class="form-control">
                     <option value="Hardware">Hardware</option>
                     <option value="Software">Software</option>
                     <option value="Network">Network</option>
@@ -88,18 +96,50 @@
 
 <script>
 var ctx = '<%= ctxPath %>';
-var allResults = [];
+var allResults = [
+<%
+    if (kbEntries != null) {
+        for (int i = 0; i < kbEntries.size(); i++) {
+            KnowledgeBase kb = kbEntries.get(i);
+%>
+    {
+        kbId: <%= kb.getKbId() %>,
+        keyword: "<%= kb.getKeyword() == null ? "" : kb.getKeyword().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>",
+        solution: "<%= kb.getSolution() == null ? "" : kb.getSolution().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>",
+        category: "<%= kb.getCategory() == null ? "" : kb.getCategory().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>"
+    }<%= i < kbEntries.size() - 1 ? "," : "" %>
+<%
+        }
+    }
+%>
+];
 var activeCategory = 'All';
 var searchTimer = null;
+
+renderCards();
 
 document.getElementById('kbSearch').addEventListener('keyup', function() {
     clearTimeout(searchTimer);
     var q = this.value.trim();
     if (q.length < 3) {
-        document.getElementById('kbGrid').innerHTML =
-            '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">&#128218;</div>'
-            + '<div class="empty-text">Type at least 3 characters to search</div></div>';
-        allResults = [];
+        allResults = [
+<%
+    if (kbEntries != null) {
+        for (int i = 0; i < kbEntries.size(); i++) {
+            KnowledgeBase kb = kbEntries.get(i);
+%>
+        {
+            kbId: <%= kb.getKbId() %>,
+            keyword: "<%= kb.getKeyword() == null ? "" : kb.getKeyword().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>",
+            solution: "<%= kb.getSolution() == null ? "" : kb.getSolution().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>",
+            category: "<%= kb.getCategory() == null ? "" : kb.getCategory().replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "").replace("\n", "\\n") %>"
+        }<%= i < kbEntries.size() - 1 ? "," : "" %>
+<%
+        }
+    }
+%>
+        ];
+        renderCards();
         return;
     }
     searchTimer = setTimeout(function() {
