@@ -21,11 +21,4 @@ public class AuditDAO {
             e.printStackTrace();
         }
     }
-
-    // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        AuditDAO dao = new AuditDAO();
-        dao.log(1, "TICKET_CREATED", "ticket", 100);
-        System.out.println("✅ Audit log entry inserted");
-    }
 }

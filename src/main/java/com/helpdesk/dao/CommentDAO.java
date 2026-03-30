@@ -73,9 +73,6 @@ public class CommentDAO {
         return c;
     }
 
-    // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        CommentDAO dao = new CommentDAO();
-        System.out.println("Comments for ticket 1: " + dao.getCommentsByTicket(1).size());
-    }
+
+
 }

@@ -102,11 +102,6 @@ public class KnowledgeBaseDAO {
         return kb;
     }
 
-    // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        KnowledgeBaseDAO dao = new KnowledgeBaseDAO();
-        System.out.println("All KB entries  : " + dao.getAll().size());
-        System.out.println("Search 'password': " + dao.searchByKeyword("password").size() + " result(s)");
-        System.out.println("Hardware category: " + dao.getAllByCategory("Hardware").size());
-    }
+
+
 }

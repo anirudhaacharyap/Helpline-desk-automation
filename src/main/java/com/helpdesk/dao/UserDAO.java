@@ -139,11 +139,6 @@ public class UserDAO {
         return u;
     }
 
-    // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        User u = dao.getUserByEmail("admin@helpdesk.com");
-        System.out.println(u != null ? "✅ Found: " + u.getName() : "❌ Not found");
-        System.out.println("Agents: " + dao.getAllAgents().size());
-    }
+
+
 }

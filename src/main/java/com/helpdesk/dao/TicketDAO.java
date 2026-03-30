@@ -247,11 +247,5 @@ public class TicketDAO {
     }
 
     // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        TicketDAO dao = new TicketDAO();
-        System.out.println("All tickets : " + dao.getAllTickets(null).size());
-        System.out.println("Open count  : " + dao.getOpenTicketCount());
-        System.out.println("By priority : " + dao.getTicketCountByPriority());
-        System.out.println("SLA breached: " + dao.getSlaBreachedCount());
-    }
+
 }
