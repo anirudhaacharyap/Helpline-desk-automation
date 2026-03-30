@@ -7,9 +7,11 @@ import java.util.List;
 
 public class CommentDAO {
 
+    private static final String COMMENT_COLUMN = "comment_text";
+
     // ── ADD COMMENT ──────────────────────────────────────────
     public boolean addComment(Comment c) {
-        String sql = "INSERT INTO ticket_comments (ticket_id, user_id, comment) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO ticket_comments (ticket_id, user_id, " + COMMENT_COLUMN + ") VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -27,7 +29,8 @@ public class CommentDAO {
     // ── GET BY TICKET ────────────────────────────────────────
     public List<Comment> getCommentsByTicket(int ticketId) {
         List<Comment> comments = new ArrayList<>();
-        String sql = "SELECT c.*, u.name AS user_name FROM ticket_comments c " +
+        String sql = "SELECT c.comment_id, c.ticket_id, c.user_id, c." + COMMENT_COLUMN + ", " +
+                "c.commented_at, u.name AS user_name FROM ticket_comments c " +
                 "JOIN users u ON c.user_id = u.user_id " +
                 "WHERE c.ticket_id = ? ORDER BY commented_at ASC";
         try (Connection conn = DBConnection.getConnection();
@@ -65,7 +68,7 @@ public class CommentDAO {
         c.setTicketId(rs.getInt("ticket_id"));
         c.setUserId(rs.getInt("user_id"));
         c.setUserName(rs.getString("user_name"));
-        c.setComment(rs.getString("comment"));
+        c.setComment(rs.getString(COMMENT_COLUMN));
         c.setCommentedAt(rs.getTimestamp("commented_at"));
         return c;
     }

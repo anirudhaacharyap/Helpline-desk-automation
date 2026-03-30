@@ -71,8 +71,13 @@ public class TicketUpdateServlet extends HttpServlet {
                 comment.setUserId(userId);
                 comment.setComment(commentText.trim());
 
-                new CommentDAO().addComment(comment);
-                auditDAO.log(userId, "COMMENT_ADDED", "ticket", ticketId);
+                boolean added = new CommentDAO().addComment(comment);
+                if (added) {
+                    auditDAO.log(userId, "COMMENT_ADDED", "ticket", ticketId);
+                } else {
+                    res.sendRedirect(req.getContextPath() + "/ticket?action=view&id=" + ticketId + "&error=Comment+could+not+be+saved");
+                    return;
+                }
             }
 
         } else if ("changeStatus".equals(action)) {
