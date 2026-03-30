@@ -62,31 +62,5 @@ public class ReportGenerator {
         doc.close();
     }
 
-    // ── QUICK TEST ───────────────────────────────────────────
-    public static void main(String[] args) {
-        try {
-            // Create mock tickets
-            Ticket t1 = new Ticket();
-            t1.setTicketId(1); t1.setTitle("Printer offline");
-            t1.setPriority("HIGH"); t1.setStatus("OPEN");
-            t1.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
 
-            Ticket t2 = new Ticket();
-            t2.setTicketId(2); t2.setTitle("VPN not working");
-            t2.setPriority("MEDIUM"); t2.setStatus("IN_PROGRESS");
-            t2.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
-
-            List<Ticket> tickets = List.of(t1, t2);
-
-            // Write PDF to file
-            java.io.FileOutputStream fos = new java.io.FileOutputStream("test_report.pdf");
-            generateTicketReport(tickets, fos);
-            fos.close();
-
-            System.out.println("✅ PDF generated: test_report.pdf (" + tickets.size() + " tickets)");
-        } catch (Exception e) {
-            System.out.println("❌ PDF generation failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
